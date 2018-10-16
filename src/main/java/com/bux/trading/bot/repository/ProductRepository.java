@@ -1,6 +1,32 @@
 package com.bux.trading.bot.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Component;
 
-public interface ProductRepository extends MongoRepository<Product, String> {
+import java.util.Optional;
+
+/**
+ * Dummy repository to avoid using Spring Boot Data
+ */
+@Component
+public class ProductRepository {
+
+    private Product product = null;
+
+    public Product save(Product entity) {
+        product = entity;
+        return entity;
+    }
+
+    public Optional<Product> findById(String s) {
+        if (product == null || !product.getProductId().equals(s)) {
+            return Optional.empty();
+        }
+        return Optional.of(product);
+    }
+
+    public void delete(Product product) {
+        if (this.product.getProductId().equals(product.getProductId())) {
+            this.product = null;
+        }
+    }
 }

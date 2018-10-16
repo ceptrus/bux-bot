@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>bot</name>
-    <description></description>
+    <description>Bux's trading bot</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -44,17 +44,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- MongoDB -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-        </dependency>
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -63,6 +52,7 @@
     </dependencies>
 
     <build>
+        <finalName>bux-trading-bot</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -70,6 +60,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

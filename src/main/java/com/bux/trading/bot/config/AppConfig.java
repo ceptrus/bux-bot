@@ -1,8 +1,8 @@
 package com.bux.trading.bot.config;
 
+import com.bux.trading.bot.config.websocket.WebSocketConfigurator;
 import com.bux.trading.bot.config.websocket.WebSocketEncoder;
 import com.bux.trading.bot.config.websocket.WebSocketEndpoint;
-import com.bux.trading.bot.config.websocket.WebSocketConfigurator;
 import com.bux.trading.bot.dto.websockets.WebSocketResponseDto;
 import com.bux.trading.bot.service.TradingQuoteHandler;
 import com.google.gson.Gson;
@@ -11,14 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.RestTemplate;
 
 import javax.websocket.*;
-import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 
@@ -31,14 +26,11 @@ public class AppConfig {
     @Autowired
     private TradingQuoteHandler tradingQuoteHandler;
 
-    @Value("${authorization.header}")
+    @Value("${bux.authorization.header}")
     private String authorization;
 
-    @Value("${language.header}")
+    @Value("${bux.language.header}")
     private String language;
-
-//    @Value("${bux.api.uri}")
-//    private String apiUri;
 
     @Value("${bux.ws.uri}")
     private String wsUri;
@@ -46,16 +38,13 @@ public class AppConfig {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Collections.singletonList(new ClientHttpRequestInterceptor() {
-            @Override
-            public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-                HttpHeaders headers = request.getHeaders();
-                headers.add("Authorization", authorization);
-                headers.add("Accept-language", language);
-                headers.add("Content-Type", "application/json");
-                headers.add("Accept", "application/json");
-                return execution.execute(request, body);
-            }
+        restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
+            HttpHeaders headers = request.getHeaders();
+            headers.add("Authorization", authorization);
+            headers.add("Accept-language", language);
+            headers.add("Content-Type", "application/json");
+            headers.add("Accept", "application/json");
+            return execution.execute(request, body);
         }));
         return restTemplate;
     }
