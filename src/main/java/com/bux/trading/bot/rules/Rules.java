@@ -5,12 +5,14 @@ import com.bux.trading.bot.dto.rest.*;
 import com.bux.trading.bot.dto.websockets.TradingQuote;
 import com.bux.trading.bot.repository.Product;
 import com.bux.trading.bot.repository.ProductRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 public abstract class Rules {
 
     @Autowired
@@ -37,6 +39,8 @@ public abstract class Rules {
     }
 
     ResponseOrder openPosition(TradingQuote tradingQuote) {
+        log.info(String.format("Opening position at %.2f", tradingQuote.getCurrentPrice()));
+
         String productId = tradingQuote.getSecurityId();
 
         RequestOrder requestOrder = RequestOrder.builder()
@@ -56,9 +60,17 @@ public abstract class Rules {
     }
 
     ResponseOrder closePosition(TradingQuote tradingQuote) {
+        log.info(String.format("Closing position at %.2f", tradingQuote.getCurrentPrice()));
         Product product = product(tradingQuote);
 
-        ResponseEntity<ResponseOrder> exchange = restTemplate.exchange(getApiClosePositionUrl(product), HttpMethod.DELETE, null, ResponseOrder.class);
+        if (product == null) {
+            String msg = String.format("Product not found %s", tradingQuote.getSecurityId());
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+
+        String url = getApiClosePositionUrl(product);
+        ResponseEntity<ResponseOrder> exchange = restTemplate.exchange(url, HttpMethod.DELETE, null, ResponseOrder.class);
         productRepository.delete(product);
 
         return exchange.getBody();

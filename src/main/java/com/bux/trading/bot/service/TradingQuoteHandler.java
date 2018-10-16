@@ -28,10 +28,11 @@ public class TradingQuoteHandler {
         TradingQuote tradingQuote = responseDto.getBody();
 
         if (!tradingQuote.getSecurityId().equals(productContext.getProductId())) {
-            log.info("Message received doesn't match configured product");
+            log.warn("New quote doesn't match configured product");
             return;
         }
-        System.out.println(tradingQuote.getCurrentPrice());
+
+        log.info(String.format("New quote for product %s @ %.2f", tradingQuote.getSecurityId(), tradingQuote.getCurrentPrice()));
 
         rules.parallelStream()
                 .filter(rule -> rule.isActive(tradingQuote))

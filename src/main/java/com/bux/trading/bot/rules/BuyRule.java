@@ -3,8 +3,10 @@ package com.bux.trading.bot.rules;
 import com.bux.trading.bot.dto.rest.ResponseOrder;
 import com.bux.trading.bot.dto.websockets.TradingQuote;
 import com.bux.trading.bot.repository.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class BuyRule extends Rules {
 
@@ -18,7 +20,7 @@ public class BuyRule extends Rules {
 
         ResponseOrder responseOrder = super.openPosition(tradingQuote);
 
-        System.out.println(String.format("Buying price: %.2f", responseOrder.getPrice().getAmount()));
+        log.info(String.format("Buying price: %.2f", responseOrder.getPrice().getAmount()));
     }
 
     @Override
