@@ -28,6 +28,8 @@ public class LowerLimitSellRule extends Rules {
 
     @Override
     public boolean isActive(TradingQuote tradingQuote) {
-        return product(tradingQuote) != null && tradingQuote.getCurrentPrice() <= productContext.getLowerLimitPrice();
+        Product product = product(tradingQuote);
+        return product != null && tradingQuote.getCurrentPrice() <= productContext.getLowerLimitPrice()
+                && tradingQuote.getCurrentPrice() < product.getPrice();
     }
 }

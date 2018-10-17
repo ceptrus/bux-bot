@@ -19,8 +19,6 @@ public class BuyRule extends Rules {
             return;
         }
 
-        log.info(String.format("Opening position at %.2f", tradingQuote.getCurrentPrice()));
-
         ResponseOrder responseOrder = super.openPosition(tradingQuote);
 
         log.info(String.format("Buying price: %.2f", responseOrder.getPrice().getAmount()));
