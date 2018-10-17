@@ -14,9 +14,12 @@ public class BuyRule extends Rules {
     public void apply(TradingQuote tradingQuote) {
         Product product = product(tradingQuote);
 
+        // You already bought it, so you can't buy again
         if (product != null) {
             return;
         }
+
+        log.info(String.format("Opening position at %.2f", tradingQuote.getCurrentPrice()));
 
         ResponseOrder responseOrder = super.openPosition(tradingQuote);
 

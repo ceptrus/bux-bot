@@ -4,6 +4,8 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Getter
 @Component
 public class ProductContext {
@@ -19,4 +21,11 @@ public class ProductContext {
 
     @Value("${trading.product.lower.limit.price}")
     private double lowerLimitPrice;
+    
+    @PostConstruct
+    public void init() {
+        if (lowerLimitPrice >= buyingPrice || buyingPrice >= upperLimitPrice) {
+            throw new RuntimeException("Invalid prices!");
+        }
+    }
 }
