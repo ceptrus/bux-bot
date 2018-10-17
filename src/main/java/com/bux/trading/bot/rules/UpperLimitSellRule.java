@@ -1,7 +1,7 @@
 package com.bux.trading.bot.rules;
 
 import com.bux.trading.bot.dto.rest.ResponseOrder;
-import com.bux.trading.bot.dto.websockets.TradingQuote;
+import com.bux.trading.bot.dto.websockets.WsQuote;
 import com.bux.trading.bot.repository.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class UpperLimitSellRule extends Rules {
 
     @Override
-    public void apply(TradingQuote tradingQuote) {
+    public void apply(WsQuote tradingQuote) {
         Product product = product(tradingQuote);
         if (product == null) {
             String msg = String.format("Product not found %s", tradingQuote.getSecurityId());
@@ -27,7 +27,7 @@ public class UpperLimitSellRule extends Rules {
     }
 
     @Override
-    public boolean isActive(TradingQuote tradingQuote) {
+    public boolean isActive(WsQuote tradingQuote) {
         Product product = product(tradingQuote);
         return product != null && tradingQuote.getCurrentPrice() >= productContext.getUpperLimitPrice()
                 && tradingQuote.getCurrentPrice() > product.getPrice();

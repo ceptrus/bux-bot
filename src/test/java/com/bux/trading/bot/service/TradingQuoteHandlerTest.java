@@ -1,8 +1,8 @@
 package com.bux.trading.bot.service;
 
 import com.bux.trading.bot.config.ProductContext;
-import com.bux.trading.bot.dto.websockets.TradingQuote;
-import com.bux.trading.bot.dto.websockets.WebSocketResponseDto;
+import com.bux.trading.bot.dto.websockets.WsQuote;
+import com.bux.trading.bot.dto.websockets.WsResponse;
 import com.bux.trading.bot.rules.Rules;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +30,8 @@ public class TradingQuoteHandlerTest {
 
     @Test
     public void handleTradingQuote() {
-        TradingQuote tradingQuote = new TradingQuote("prodId", 12345D);
-        WebSocketResponseDto webSocketResponseDto = new WebSocketResponseDto(WebSocketResponseDto.TRADING_QUOTE, tradingQuote);
+        WsQuote tradingQuote = new WsQuote("prodId", 12345D);
+        WsResponse webSocketResponseDto = new WsResponse("trading.quote", tradingQuote);
 
         when(productContext.getProductId()).thenReturn("prodId");
 
@@ -42,22 +42,13 @@ public class TradingQuoteHandlerTest {
 
     @Test
     public void handleTradingQuoteDifferentProductId() {
-        TradingQuote tradingQuote = new TradingQuote("oldProdId", 12345D);
-        WebSocketResponseDto webSocketResponseDto = new WebSocketResponseDto(WebSocketResponseDto.TRADING_QUOTE, tradingQuote);
+        WsQuote tradingQuote = new WsQuote("oldProdId", 12345D);
+        WsResponse webSocketResponseDto = new WsResponse("trading.quote", tradingQuote);
 
         when(productContext.getProductId()).thenReturn("newProdId");
 
         tradingQuoteHandler.handleTradingQuote(webSocketResponseDto);
 
         verify(rules, times(0)).parallelStream();
-    }
-
-    @Test
-    public void handleTradingQuoteMessageWrongType() {
-        WebSocketResponseDto webSocketResponseDto = new WebSocketResponseDto("wrongType", null);
-
-        tradingQuoteHandler.handleTradingQuote(webSocketResponseDto);
-
-        verify(productContext, times(0)).getProductId();
     }
 }

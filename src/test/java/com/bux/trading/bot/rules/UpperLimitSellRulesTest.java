@@ -1,7 +1,7 @@
 package com.bux.trading.bot.rules;
 
 import com.bux.trading.bot.config.ProductContext;
-import com.bux.trading.bot.dto.websockets.TradingQuote;
+import com.bux.trading.bot.dto.websockets.WsQuote;
 import com.bux.trading.bot.repository.Product;
 import com.bux.trading.bot.repository.ProductRepository;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class UpperLimitSellRulesTest {
 
     @Test
     public void isActive() {
-        TradingQuote tradingQuote = new TradingQuote("prodId", 666D);
+        WsQuote tradingQuote = new WsQuote("prodId", 666D);
 
         when(productRepository.findById("prodId")).thenReturn(Optional.of(new Product("prodId", "positionId", 555D)));
         when(productContext.getUpperLimitPrice()).thenReturn(600D);
@@ -40,7 +40,7 @@ public class UpperLimitSellRulesTest {
 
     @Test
     public void isActiveCurrentPriceToLow() {
-        TradingQuote tradingQuote = new TradingQuote("prodId", 444D);
+        WsQuote tradingQuote = new WsQuote("prodId", 444D);
 
         when(productRepository.findById("prodId")).thenReturn(Optional.of(new Product("prodId", "positionId", 500)));
         when(productContext.getUpperLimitPrice()).thenReturn(555D);
@@ -50,7 +50,7 @@ public class UpperLimitSellRulesTest {
 
     @Test
     public void isActiveNotBoughtYet() {
-        TradingQuote tradingQuote = new TradingQuote("prodId", 555D);
+        WsQuote tradingQuote = new WsQuote("prodId", 555D);
 
         when(productRepository.findById("prodId")).thenReturn(Optional.empty());
 

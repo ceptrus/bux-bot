@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WebSocketResponseDto {
-    public static final String TRADING_QUOTE = "trading.quote";
-
-    private String t;
-    private TradingQuote body;
+public class WsQuote {
+    private String securityId;
+    private double currentPrice;
 }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TradingQuote {
-    private String securityId;
-    private double currentPrice;
+public class WsResponse {
+    private String t;
+    private WsQuote body;
 }

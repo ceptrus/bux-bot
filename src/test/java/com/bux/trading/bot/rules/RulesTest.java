@@ -1,7 +1,7 @@
 package com.bux.trading.bot.rules;
 
 import com.bux.trading.bot.dto.rest.*;
-import com.bux.trading.bot.dto.websockets.TradingQuote;
+import com.bux.trading.bot.dto.websockets.WsQuote;
 import com.bux.trading.bot.repository.Product;
 import com.bux.trading.bot.repository.ProductRepository;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class RulesTest {
 
     @Test
     public void openPositionTest() {
-        TradingQuote tradingQuote = new TradingQuote("prodId", 123D);
+        WsQuote tradingQuote = new WsQuote("prodId", 123D);
 
         ResponseOrder responseOrder = new ResponseOrder("id", "positionId", null, null, null, null, 2, TradeType.SELL, "type", 123L);
 

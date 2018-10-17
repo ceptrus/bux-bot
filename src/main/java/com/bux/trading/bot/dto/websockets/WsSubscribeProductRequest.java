@@ -3,7 +3,7 @@ package com.bux.trading.bot.dto.websockets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubscribeRequestDto {
+public class WsSubscribeProductRequest {
     private final static String PREFIX = "trading.product.";
 
     private List<String> subscribeTo = new ArrayList<>();

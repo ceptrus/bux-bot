@@ -1,7 +1,7 @@
 package com.bux.trading.bot.rules;
 
 import com.bux.trading.bot.config.ProductContext;
-import com.bux.trading.bot.dto.websockets.TradingQuote;
+import com.bux.trading.bot.dto.websockets.WsQuote;
 import com.bux.trading.bot.repository.Product;
 import com.bux.trading.bot.repository.ProductRepository;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class BuyRulesTest {
 
     @Test
     public void isActive() {
-        TradingQuote tradingQuote = new TradingQuote("prodId", 555D);
+        WsQuote tradingQuote = new WsQuote("prodId", 555D);
 
         when(productRepository.findById("prodId")).thenReturn(Optional.empty());
         when(productContext.getBuyingPrice()).thenReturn(444D);
@@ -40,7 +40,7 @@ public class BuyRulesTest {
 
     @Test
     public void isActiveCurrentPriceToLow() {
-        TradingQuote tradingQuote = new TradingQuote("prodId", 555D);
+        WsQuote tradingQuote = new WsQuote("prodId", 555D);
 
         when(productRepository.findById("prodId")).thenReturn(Optional.empty());
         when(productContext.getBuyingPrice()).thenReturn(666D);
@@ -50,7 +50,7 @@ public class BuyRulesTest {
 
     @Test
     public void isActiveAlreadyBought() {
-        TradingQuote tradingQuote = new TradingQuote("prodId", 555D);
+        WsQuote tradingQuote = new WsQuote("prodId", 555D);
 
         when(productRepository.findById("prodId")).thenReturn(Optional.of(new Product("prodId", "positionId", 1D)));
 
