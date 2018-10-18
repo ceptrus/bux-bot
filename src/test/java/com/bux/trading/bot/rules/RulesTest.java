@@ -61,7 +61,7 @@ public class RulesTest {
                 .build();
 
         ReflectionTestUtils.setField(rules, "apiUrl", "http://myurl.com");
-        ReflectionTestUtils.setField(rules, "amount", 999D);
+        ReflectionTestUtils.setField(rules, "amountToBuy", 999D);
         when(restTemplate.postForEntity(rules.getApiTradeUrl(), requestOrder, ResponseOrder.class)).thenReturn(new ResponseEntity<>(responseOrder, HttpStatus.OK));
 
         ResponseOrder returnResponseOrder = rules.openPosition(tradingQuote);

@@ -26,22 +26,22 @@ public abstract class Rules {
     private String apiUrl;
 
     @Value("${orders.place.amout}")
-    private double amount;
+    private double amountToBuy;
 
-    public abstract void apply(WsQuote tradingQuote);
-    public abstract boolean isActive(WsQuote tradingQuote);
+    public abstract void apply(WsQuote wsQuote);
+    public abstract boolean isActive(WsQuote wsQuote);
 
-    protected Product product(WsQuote tradingQuote) {
-        return productRepository.findById(tradingQuote.getSecurityId())
+    protected Product product(WsQuote wsQuote) {
+        return productRepository.findById(wsQuote.getSecurityId())
                 .orElse(null);
     }
 
-    protected ResponseOrder openPosition(WsQuote tradingQuote) {
-        String productId = tradingQuote.getSecurityId();
+    protected ResponseOrder openPosition(WsQuote wsQuote) {
+        String productId = wsQuote.getSecurityId();
 
         RequestOrder requestOrder = RequestOrder.builder()
                 .direction(TradeType.BUY)
-                .investingAmount(new Amount("BUX", 2, amount))
+                .investingAmount(new Amount("BUX", 2, amountToBuy))
                 .leverage(2)
                 .productId(productId)
                 .source(new Source(SourceType.OTHER))
@@ -50,7 +50,7 @@ public abstract class Rules {
         ResponseEntity<ResponseOrder> orderResponseEntity = restTemplate.postForEntity(getApiTradeUrl(), requestOrder, ResponseOrder.class);
         String positionId = orderResponseEntity.getBody().getPositionId();
 
-        productRepository.save(new Product(productId, positionId, tradingQuote.getCurrentPrice()));
+        productRepository.save(new Product(productId, positionId, wsQuote.getCurrentPrice()));
 
         return orderResponseEntity.getBody();
     }

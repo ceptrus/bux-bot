@@ -3,7 +3,7 @@ package com.bux.trading.bot.config;
 import com.bux.trading.bot.config.websocket.WebSocketConfigurator;
 import com.bux.trading.bot.config.websocket.WebSocketEncoder;
 import com.bux.trading.bot.config.websocket.WebSocketEndpoint;
-import com.bux.trading.bot.service.TradingQuoteHandler;
+import com.bux.trading.bot.service.WsMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,15 +17,13 @@ import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 public class AppConfig {
 
     @Autowired
-    private ProductContext productContext;
-
-    @Autowired
-    private TradingQuoteHandler tradingQuoteHandler;
+    private List<WsMessageHandler> wsMessageHandlers;
 
     @Value("${bux.authorization.header}")
     private String authorization;
@@ -54,7 +52,7 @@ public class AppConfig {
     public Session session() {
         try {
             WebSocketConfigurator webSocketConfigurator = new WebSocketConfigurator(authorization, language);
-            WebSocketEndpoint endpointConfig = new WebSocketEndpoint(productContext, tradingQuoteHandler);
+            WebSocketEndpoint endpointConfig = new WebSocketEndpoint(wsMessageHandlers);
 
             ClientEndpointConfig clientEndpointConfig = ClientEndpointConfig.Builder.create()
                     .configurator(webSocketConfigurator)

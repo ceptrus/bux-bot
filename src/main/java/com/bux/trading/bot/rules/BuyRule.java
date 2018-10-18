@@ -11,21 +11,21 @@ import org.springframework.stereotype.Component;
 public class BuyRule extends Rules {
 
     @Override
-    public void apply(WsQuote tradingQuote) {
-        Product product = product(tradingQuote);
+    public void apply(WsQuote wsQuote) {
+        Product product = product(wsQuote);
 
         // You already bought it, so you can't buy again
         if (product != null) {
             return;
         }
 
-        ResponseOrder responseOrder = super.openPosition(tradingQuote);
+        ResponseOrder responseOrder = super.openPosition(wsQuote);
 
         log.info(String.format("Buying price: %.2f", responseOrder.getPrice().getAmount()));
     }
 
     @Override
-    public boolean isActive(WsQuote tradingQuote) {
-        return product(tradingQuote) == null && tradingQuote.getCurrentPrice() >= productContext.getBuyingPrice();
+    public boolean isActive(WsQuote wsQuote) {
+        return product(wsQuote) == null && wsQuote.getCurrentPrice() >= productContext.getBuyingPrice();
     }
 }

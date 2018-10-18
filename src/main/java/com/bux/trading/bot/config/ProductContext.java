@@ -25,7 +25,7 @@ public class ProductContext {
     @PostConstruct
     public void init() {
         if (lowerLimitPrice >= buyingPrice || buyingPrice >= upperLimitPrice) {
-            throw new RuntimeException("Invalid prices!");
+            throw new RuntimeException("Invalid startup prices!");
         }
     }
 }

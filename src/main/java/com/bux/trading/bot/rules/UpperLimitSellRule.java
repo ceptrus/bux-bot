@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 public class UpperLimitSellRule extends Rules {
 
     @Override
-    public void apply(WsQuote tradingQuote) {
-        Product product = product(tradingQuote);
+    public void apply(WsQuote wsQuote) {
+        Product product = product(wsQuote);
         if (product == null) {
-            String msg = String.format("Product not found %s", tradingQuote.getSecurityId());
+            String msg = String.format("Product not found %s", wsQuote.getSecurityId());
             log.error(msg);
             throw new RuntimeException(msg);
         }
 
-        log.info(String.format("Closing position at %.2f", tradingQuote.getCurrentPrice()));
+        log.info(String.format("Closing position at %.2f", wsQuote.getCurrentPrice()));
 
         ResponseOrder responseOrder = super.closePosition(product);
 
@@ -27,9 +27,9 @@ public class UpperLimitSellRule extends Rules {
     }
 
     @Override
-    public boolean isActive(WsQuote tradingQuote) {
-        Product product = product(tradingQuote);
-        return product != null && tradingQuote.getCurrentPrice() >= productContext.getUpperLimitPrice()
-                && tradingQuote.getCurrentPrice() > product.getPrice();
+    public boolean isActive(WsQuote wsQuote) {
+        Product product = product(wsQuote);
+        return product != null && wsQuote.getCurrentPrice() >= productContext.getUpperLimitPrice()
+                && wsQuote.getCurrentPrice() > product.getPrice();
     }
 }
